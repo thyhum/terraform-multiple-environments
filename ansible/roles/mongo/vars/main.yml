@@ -1,0 +1,4 @@
+---
+mountdir_mongo: /mongo
+mountdir_mongo_db: "{{ mountdir_mongo}}/db"
+mountdir_mongo_configdb: "{{ mountdir_mongo}}/configdb"

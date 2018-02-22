@@ -1,0 +1,21 @@
+---
+- name: Ensure DB folder is present
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ mountdir_mongo_db }}"
+    - "{{ mountdir_mongo_configdb }}"
+
+- name: Create MongoDB container
+  docker_container:
+    name: mongo34
+    image: "mongo:3.4"
+    ports:
+      - "27017:27017"
+    log_driver: syslog
+    log_options:
+      tag: mongodb
+    volumes:
+      - "{{ mountdir_mongo_db }}:/data/db"
+      - "{{ mountdir_mongo_configdb }}:/data/configdb"

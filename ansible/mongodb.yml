@@ -1,0 +1,22 @@
+- name: Wait for ssh running on all instance
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - pause:
+        seconds: 90
+        prompt: Waiting for 90 seconds
+
+- name: MongoDB Cluster
+  hosts: mongodb
+  gather_facts: True
+  become: yes
+  roles:
+    - ebs_disk
+    - docker
+    - mongo
+
+  tasks:
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+

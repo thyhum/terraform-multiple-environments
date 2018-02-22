@@ -1,0 +1,8 @@
+---
+- include: ebs_redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+# Future enhancement for Ubuntu and Linux Mints
+#   ansible_os_family is Debian
+#- include: install_debian.yml
+#  when: ansible_os_family == 'Debian'

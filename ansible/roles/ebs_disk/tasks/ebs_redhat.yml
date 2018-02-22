@@ -1,0 +1,47 @@
+---
+- name: Ensure required packages are installed
+  yum:
+    name:   "{{ item }}"
+    state:  present
+  with_items:
+    - parted
+    - lvm2
+    - xfsprogs
+
+- name: Ensure PV is present
+  parted:
+    device: "{{ ebs_disk }}"
+    number: 1
+    flags:  [ lvm ]
+    state:  present
+
+- name: Ensure VG ({{ VGNAME }}) is present
+  lvg:
+    vg:     "{{ VGNAME }}"
+    pvs:    "{{ ebs_disk }}1"
+    state:  present
+
+- name: Ensure LV ({{ LVNAME }}) is present
+  lvol:
+    vg:     "{{ VGNAME }}"
+    lv:     "{{ LVNAME }}"
+    shrink: no
+    size:   +100%FREE
+    state:  present
+
+- name: Verify or apply xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev:    "/dev/mapper/{{ VGNAME }}-{{ LVNAME }}"
+
+- name: Create directory {{ mountdir_mongo }}
+  file:
+    path:   "{{ mountdir_mongo }}"
+    state:  directory
+
+- name: Mount {{ LVNAME }}
+  mount:
+    name:   "{{ mountdir_mongo }}"
+    src:    "/dev/mapper/{{ VGNAME }}-{{ LVNAME }}"
+    fstype: xfs
+    state:  mounted

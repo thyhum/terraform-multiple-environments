@@ -1,0 +1,5 @@
+---
+ebs_disk: /dev/xvdh
+
+VGNAME: VGmongo
+LVNAME: LVmongo

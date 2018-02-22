@@ -1,0 +1,30 @@
+---
+- include: install_redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+# Future enhancement for Ubuntu and Linux Mints
+#   ansible_os_family is Debian
+#- include: install_debian.yml
+#  when: ansible_os_family == 'Debian'
+
+- name: Install Docker CE
+  package:
+    name: docker-ce
+    state: present
+
+- name: Ensure docker service is started and running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Install docker-compose.
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
+    dest: "/usr/bin/docker-compose"
+    mode: 0755
+
+#- name: Install docker-compose
+#  pip:
+#    name: docker-compose
+#    version: "{{ docker_compose_version }}"

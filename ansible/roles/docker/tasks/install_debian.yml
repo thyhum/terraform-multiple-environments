@@ -1,0 +1,5 @@
+---
+# Future enhancement
+- name: Future enhancement for Ubuntu and Linux Mint
+  debug:
+    msg: "{{ ansible_os_family}} - Future enhancement for Ubuntu and Linux Mint"

@@ -1,0 +1,31 @@
+---
+# Ref: https://docs.docker.com/install/linux/docker-ce/centos/#install-docker-ce
+- name: Ensure old docker packages are absent
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-common
+    - docker-engine
+
+- name: Install Required Packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - epel-release
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    - docker-python
+
+# Docker CD Stable from https://download.docker.com/linux/centos/docker-ce.repo
+- name: add docker repository
+  yum_repository:
+    name: docker
+    description: Docker CE Stable - $basearch
+    baseurl: "https://download.docker.com/linux/centos/{{ ansible_distribution_major_version }}/$basearch/stable"
+    gpgcheck: 1
+    gpgkey: https://download.docker.com/linux/centos/gpg
+
