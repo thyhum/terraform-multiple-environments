@@ -28,9 +28,9 @@ Ansible playbook will then take care of configuring the instances:
 
 It can be enhanced to support multi IaaS providers (eg. GCP/Azure, etc) and operating system (eg. Ubuntu); and even be integrated with other SaaS (eg. Cloudflare, DNS provider, etc).
 
-#Requirements
+# Requirements
 
-##1. Tools
+## 1. Tools
 Ensure we have the following tools installed and activated (I have not verified whether or not there is any compatibility issue with different version):
 * Terraform v0.11.3
     * provider.aws v1.9.0
@@ -38,7 +38,7 @@ Ensure we have the following tools installed and activated (I have not verified 
 * Python v3.5.2
 * Ansible v2.4.3.0
 
-##2. Domain
+## 2. Domain
 * Create a zone in Route 53 (eg. thyhum.com) as main DNS domain  
     It'll be used as a data source in Terraform later. We don't configure it as a resource to prevent it being removed when we destroy our infrastructure :)  
 
@@ -54,9 +54,9 @@ Ensure we have the following tools installed and activated (I have not verified 
 * Each instance's FQDN will be under <ENV>.your.domain, eg.
     * An instance in DEV-AP: mongo.dev-ap.thyhum.com 
 
-#Terraform Variables
+# Terraform Variables
 
-##Global 
+## Global 
 Global variables are stored in _terraform.tfvars_. 
 ```hcl-terraform
 aws_access_key   = "<Your AWS Access Key>"
@@ -65,7 +65,7 @@ aws_secret_key   = "<Your AWS Secret Key>"
 dns_domain       = "thyhum.com"
 ```
 
-##Environment
+## Environment
 Environment variable is located in "**environment/<TF_ENV>/main.yml**".  
 
 It will override variables defined in terraform.tfvars and variables with default value. As an example, in dev-ap environment, we use different DNS Domain and also define environment-specific variables (eg. Resource's environment tag, CIDR block, Region, etc):
@@ -84,7 +84,7 @@ mongodb_ebs_vol_size = 1
 
 Optionally, you can override other variables too (eg. using different set of SSH public/private keys).
 
-##Sample Environments in this repo
+## Sample Environments in this repo
 Main DNS Domain: thyhum.com
 
 * **dev-ap** (environment/dev-ap/main.tfvars)  
@@ -116,8 +116,8 @@ Main DNS Domain: thyhum.com
     Sub-domain: prod.thyhum.com  
 
  
-#Usage
-##Initialize
+# Usage
+## Initialize
 As a start, go to the folder where terraform configuration files located. 
 
 Run _terraform init_ to install all required plugins (aws and null). This command need to be run at the first-time after cloning from version control or adding a new provider in Terraform configuration.
@@ -162,7 +162,7 @@ This command can be put in a wrapper script too, eg:
 $ ./terraform.multienv.sh dev-ap
 ```
 
-##Create
+## Create
 Now let me show you how to create an environment.
 
 Terraform v0.11.3 has merged *plan* to *apply* command, so we can safely run *terraform apply* to review it before performing the actions.
@@ -264,7 +264,7 @@ Connection closed.
 
 We have successfully deployed two MongoDB servers to dev-ap and verified the connectivity.  
 
-##Destroy
+## Destroy
 
 Now I'm going to show you destroying dev-ap environment.  
 
